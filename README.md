@@ -3,5 +3,5 @@
 **Requirements:**
 
 ``
-pip intall pygame
+pip install pygame
 ``

@@ -4,6 +4,9 @@ from pygame import *
 black = (0, 0, 0)
 white = (245, 245, 245)
 beige = (208, 176, 144)
+red    = (133, 42, 44)
+green  = (26, 81, 79)
+blue = (31, 135, 215)
 
 class Gomoku:
 
@@ -38,7 +41,9 @@ class Gomoku:
                 if event.type == pygame.QUIT:
                     self.run = False
 
-                print(event)
+            self.displayButton()
+
+            print(event)
 
             pygame.display.update()
 
@@ -55,6 +60,20 @@ class Gomoku:
             for column in range(14):
                 pygame.draw.rect(self.gameDisplay, white, [36 * column + 36, 36 * row + 36, 35, 35])
 
+    def displayButton(self):
+        """Display start button"""
+        color = blue
+        info = "Start"
+
+        pygame.draw.rect(self.gameDisplay, color,
+                         (240, 600, 100, 50))
+
+        info_font = pygame.font.SysFont('Helvetica', 25)
+        text = info_font.render(info, True, white)
+        textRect = text.get_rect()
+        textRect.centerx = self.gamewidth // 2
+        textRect.centery = self.gameheight - 75
+        self.gameDisplay.blit(text, textRect)
 
     def play_turn(self):
         if self.num_turns % 2 == 0:

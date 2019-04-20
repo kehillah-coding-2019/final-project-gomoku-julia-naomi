@@ -7,6 +7,8 @@ beige = (208, 176, 144)
 red    = (133, 42, 44)
 green  = (26, 81, 79)
 blue = (31, 135, 215)
+bright_blue = (31, 135, 255)
+
 
 class Gomoku:
 
@@ -43,7 +45,7 @@ class Gomoku:
 
             self.displayButton()
 
-            print(event)
+            #print(event)
 
             pygame.display.update()
 
@@ -60,26 +62,58 @@ class Gomoku:
             for column in range(14):
                 pygame.draw.rect(self.gameDisplay, white, [36 * column + 36, 36 * row + 36, 35, 35])
 
+    def button(self, msg,x,y,w,h,ic,ac):
+        mouse = pygame.mouse.get_pos()
+
+        if x+w > mouse[0] > x and y+h > mouse[1] > y:
+            pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
+            print('The mouse is over the button')
+        else:
+            pygame.draw.rect(self.gameDisplay, ic,(x,y,w,h))
+
+        smallText = pygame.font.SysFont("Helvetica",25)
+        textSurf = smallText.render(msg, True, ic)
+        textRect = textSurf.get_rect()
+
+        textRect.centerx = x+ (w/2)
+        textRect.centery = y+ (h/2)
+        self.gameDisplay.blit(textSurf, textRect)
+
     def displayButton(self):
         """Display start button"""
+
         color = blue
         info = "Start"
 
-        pygame.draw.rect(self.gameDisplay, color,
-                         (240, 600, 100, 50))
+        mouse = pygame.mouse.get_pos()
 
-        info_font = pygame.font.SysFont('Helvetica', 25)
-        text = info_font.render(info, True, white)
-        textRect = text.get_rect()
-        textRect.centerx = self.gamewidth // 2
-        textRect.centery = self.gameheight - 75
-        self.gameDisplay.blit(text, textRect)
+
+        # pygame.draw.rect(self.gameDisplay, color,
+        #                  (240, 600, 100, 50))
+        #
+        # info_font = pygame.font.SysFont('Helvetica', 25)
+        # text = info_font.render(info, True, white)
+        # textRect = text.get_rect()
+        # textRect.centerx = self.gamewidth // 2
+        # textRect.centery = self.gameheight - 75
+        # self.gameDisplay.blit(text, textRect)
+
+        self.button("start",240,600,100,50,blue,bright_blue)
+
+
+        #if 240 + 100 > mouse[0] > 240 and 600 + 50 > mouse[1] > 600:
+        #print('The mouse is over the button')
+        
 
     def play_turn(self):
-        if self.num_turns % 2 == 0:
-            player = self.player_1
-        else:
-            player = self.player_2
 
         if event.type == pygame.QUIT:
             self.run = False
+
+        global player
+        if self.displayButton():
+            if not self.play:
+                self.start()
+                print('Game started!')
+                if player:
+                    player = not PLAYER

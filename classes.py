@@ -53,7 +53,6 @@ class Gomoku:
 
             self.render()
 
-            pygame.display.update()
 
             self.clock.tick(60)
 
@@ -88,11 +87,13 @@ class Gomoku:
                             print('You won!')
 
                         else:
-                            
+
                             player = not player
 
     def render(self):
         self.drawPiece()
+        self.turnInfo()
+        pygame.display.update()
 
     def drawBoard(self):
         """Draw the gomoku board"""
@@ -118,6 +119,17 @@ class Gomoku:
 
                     pygame.draw.circle(self.gameDisplay, color, center, 35//2 - 1, 0)
                     pygame.draw.circle(self.gameDisplay, black, center, 35//2 - 1, 1)
+
+    def turnInfo(self):
+        """Display who's turn it is"""
+        if player == False:
+            player_name = self.player_1
+        else:
+            player_name = self.player_2
+        info = "It's your turn, %s" % (player_name)
+        info_font = pygame.font.SysFont('Helvetica', 25)
+        text = info_font.render(info, True, black)
+        self.gameDisplay.blit(text,(220,660))
 
 
     def createButton(self, msg,x,y,w,h,ic,ac, tc, action=None):

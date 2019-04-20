@@ -7,7 +7,9 @@ beige = (208, 176, 144)
 red    = (133, 42, 44)
 green  = (26, 81, 79)
 blue = (31, 135, 215)
+bright_red = (220, 0, 0)
 bright_blue = (0, 100, 255)
+
 
 player = False
 
@@ -49,6 +51,8 @@ class Gomoku:
 
             #print(event)
 
+            self.render()
+
             pygame.display.update()
 
             self.clock.tick(60)
@@ -66,15 +70,12 @@ class Gomoku:
 
             pos = pygame.mouse.get_pos()
 
-            if not self.play:
-                self.play = True
-
             if self.play:
 
                 print(self.board)
 
-                x = (pos[0] - 70 // 2) // (36)
-                y = (pos[1] - 70 // 2) // (36)
+                x = (pos[0] - 35 + 35 // 2) // (36)
+                y = (pos[1] - 35 + 35 // 2) // (36)
 
                 if 0 <= x < 15 and 0 <= y < 15:
                     if self.board[x][y] == 0:
@@ -87,16 +88,37 @@ class Gomoku:
                             print('You won!')
 
                         else:
+                            
                             player = not player
+
+    def render(self):
+        self.drawPiece()
 
     def drawBoard(self):
         """Draw the gomoku board"""
-        self.gameDisplay.fill(white) #background
-        pygame.draw.rect(self.gameDisplay, beige, [25, 20, 525, 525])
 
-        for row in range(14): #tiles
-            for column in range(14):
-                pygame.draw.rect(self.gameDisplay, white, [36 * column + 36, 36 * row + 36, 35, 35])
+        self.gameDisplay.fill(white) #background
+        pygame.draw.rect(self.gameDisplay, black, [35, 35, 505, 505])
+
+        for x in range(15): #tiles
+            for y in range(15):
+                pygame.draw.rect(self.gameDisplay, white, [36 * x + 36, 36 * y + 36, 35, 35])
+
+    def drawPiece(self):
+
+        for x in range(15):
+            for y in range(15):
+                center = (36 * x + 36), (36 * y + 36)
+                if self.board[x][y] > 0:
+                    if self.board[x][y] == 1:
+                        color = white
+
+                    elif self.board[x][y] == 2:
+                        color = black
+
+                    pygame.draw.circle(self.gameDisplay, color, center, 35//2 - 1, 0)
+                    pygame.draw.circle(self.gameDisplay, black, center, 35//2 - 1, 1)
+
 
     def createButton(self, msg,x,y,w,h,ic,ac, tc, action=None):
         """Create button with mouse over and clicking functionality"""
@@ -108,6 +130,10 @@ class Gomoku:
             if click[0] == 1 and action != None:
                 if action == "play":
                     self.play = True
+
+                if action == "quit":
+                    self.play = False
+
 
         else:
             pygame.draw.rect(self.gameDisplay, ic,(x,y,w,h))
@@ -123,8 +149,10 @@ class Gomoku:
     def displayButton(self):
         """Display start button"""
 
-        color = blue
-        info = "Start"
+        color = red if self.play else blue
+        color2 = bright_red if self.play else bright_blue
+        info = "Quit" if self.play else "Start"
+        action = "quit" if self.play else "play"
 
         mouse = pygame.mouse.get_pos()
 
@@ -139,7 +167,7 @@ class Gomoku:
         # textRect.centery = self.gameheight - 75
         # self.gameDisplay.blit(text, textRect)
 
-        self.createButton("Start", 240, 600, 100, 50, blue, bright_blue, white, "play")
+        self.createButton(info, 240, 600, 100, 50, color, color2, white, action)
 
 
         #if 240 + 100 > mouse[0] > 240 and 600 + 50 > mouse[1] > 600:

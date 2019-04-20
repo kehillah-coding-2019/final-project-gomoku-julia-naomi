@@ -1,4 +1,4 @@
 from classes import Gomoku
 
-gomoku = Gomoku()
-#gomoku.on_execute()
+gomoku = Gomoku('julia', 'naomi')
+gomoku.execute()

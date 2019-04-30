@@ -83,8 +83,7 @@ class Gomoku:
                         self.board[x][y] = 1 if player else 2
 
                         if self.win == True:
-
-                            print('You won!')
+                            print('Win!')
 
                         else:
 
@@ -143,7 +142,7 @@ class Gomoku:
                 if action == "play":
                     self.play = True
 
-                if action == "quit":
+                if action == "pause":
                     self.play = False
 
 
@@ -163,8 +162,8 @@ class Gomoku:
 
         color = red if self.play else blue
         color2 = bright_red if self.play else bright_blue
-        info = "Quit" if self.play else "Start"
-        action = "quit" if self.play else "play"
+        info = "Pause" if self.play else "Start"
+        action = "pause" if self.play else "play"
 
         mouse = pygame.mouse.get_pos()
 
@@ -184,3 +183,20 @@ class Gomoku:
 
         #if 240 + 100 > mouse[0] > 240 and 600 + 50 > mouse[1] > 600:
         #print('The mouse is over the button')
+
+    def checkWin(self, pos, player):
+        piece = 1 if player else 2
+        streak = 0
+        directions = [([0,1] , [0,-1]) , ([1,0] , [-1,0]) , ([-1,1] , [1,-1]) , ([1,1] , [-1,-1])]
+
+        for direction in directions:
+
+            if self.board[pos[0]][pos[1]] == piece:
+                streak += 1
+            else:
+                break
+            p[0] += direction[i][0]
+            p[1] += direction[i][1]
+
+            if streak == 4:
+                return True

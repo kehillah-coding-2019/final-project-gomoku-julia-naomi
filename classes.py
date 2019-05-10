@@ -82,7 +82,7 @@ class Gomoku:
 
                         self.board[x][y] = 1 if player else 2
 
-                        if self.win == True:
+                        if self.checkWin([x,y], player):
                             print('Win!')
 
                         else:
@@ -186,17 +186,19 @@ class Gomoku:
 
     def checkWin(self, pos, player):
         piece = 1 if player else 2
-        streak = 0
+        if self.board[pos[0]][pos[1]] != piece:
+            return False
         directions = [([0,1] , [0,-1]) , ([1,0] , [-1,0]) , ([-1,1] , [1,-1]) , ([1,1] , [-1,-1])]
-
         for direction in directions:
-
-            if self.board[pos[0]][pos[1]] == piece:
-                streak += 1
-            else:
-                break
-            p[0] += direction[i][0]
-            p[1] += direction[i][1]
-
-            if streak == 4:
+            streak = 1
+            for i in range(2):
+                while 0 <= pos[0] < 15 and 0 <= pos[1] < 15:
+                    if self.board[pos[0]][pos[1]] == piece:
+                        streak += 1
+                    else:
+                        break
+                    pos[0] += direction[i][0]
+                    pos[1] += direction[i][1]
+            if streak > 5:
                 return True
+        return False

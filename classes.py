@@ -39,6 +39,7 @@ class Gomoku:
         self.play = False
         self.win = False
 
+
     def execute(self):
         """Runs on execute"""
 
@@ -83,7 +84,13 @@ class Gomoku:
                         self.board[x][y] = 1 if player else 2
 
                         if self.checkWin([x,y], player):
+                            self.win = True
                             print('Win!')
+
+                            info = "%s has won the game!" % (player_name)
+                            info_font = pygame.font.SysFont('Helvetica', 25)
+                            text1 = info_font.render(info, True, black)
+                            self.gameDisplay.blit(text1,(500,500))
 
                         else:
 
@@ -121,11 +128,14 @@ class Gomoku:
 
     def turnInfo(self):
         """Display who's turn it is"""
+        global player_name
+
         if player == False:
             player_name = self.player_1
         else:
             player_name = self.player_2
-        info = "It's your turn, %s" % (player_name)
+
+        info = "It's your turn, %s" % (player_name) if not self.win else "%s has won the game" % (player_name)
         info_font = pygame.font.SysFont('Helvetica', 25)
         text = info_font.render(info, True, black)
         self.gameDisplay.blit(text,(220,660))
@@ -167,7 +177,6 @@ class Gomoku:
 
         mouse = pygame.mouse.get_pos()
 
-
         # pygame.draw.rect(self.gameDisplay, color,
         #                  (240, 600, 100, 50))
         #
@@ -179,7 +188,6 @@ class Gomoku:
         # self.gameDisplay.blit(text, textRect)
 
         self.createButton(info, 240, 600, 100, 50, color, color2, white, action)
-
 
         #if 240 + 100 > mouse[0] > 240 and 600 + 50 > mouse[1] > 600:
         #print('The mouse is over the button')

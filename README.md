@@ -7,6 +7,7 @@ pip install pygame
 ``
 
 **How to Run**
+
 First cd into class:
 ``
 cd final-project-gomoku-julia-naomi

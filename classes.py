@@ -70,7 +70,12 @@ class Gomoku:
 
             pos = pygame.mouse.get_pos()
 
-            if self.play:
+            if not self.play:
+                self.start()
+                if player:
+                    player = not player
+
+            elif self.play:
 
                 print(self.board)
 
@@ -85,8 +90,8 @@ class Gomoku:
 
                         if self.checkWin([x,y], player):
                             self.win = True
+                            self.play = False
                             print('Win!')
-
                             info = "%s has won the game!" % (player_name)
                             info_font = pygame.font.SysFont('Helvetica', 25)
                             text1 = info_font.render(info, True, black)
@@ -100,6 +105,12 @@ class Gomoku:
         self.drawPiece()
         self.turnInfo()
         pygame.display.update()
+
+    def start(self):
+        self.play = True
+        self.board = [[0 for x in range(15)] for y in range(15)]
+        self.lastpos = [-1,-1]
+        self.win = False
 
     def drawBoard(self):
         """Draw the gomoku board"""
@@ -148,12 +159,13 @@ class Gomoku:
 
         if x+w > mouse[0] > x and y+h > mouse[1] > y:
             pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
+            return True
             if click[0] == 1 and action != None:
                 if action == "play":
                     self.play = True
 
-                if action == "pause":
-                    self.play = False
+                #if action == "pause":
+                    #self.play = False
 
 
         else:
@@ -198,15 +210,16 @@ class Gomoku:
             return False
         directions = [([0,1] , [0,-1]) , ([1,0] , [-1,0]) , ([-1,1] , [1,-1]) , ([1,1] , [-1,-1])]
         for direction in directions:
-            streak = 1
+            streak = 0
             for i in range(2):
-                while 0 <= pos[0] < 15 and 0 <= pos[1] < 15:
-                    if self.board[pos[0]][pos[1]] == piece:
+                p = pos[:]
+                while 0 <= p[0] < 15 and 0 <= p[1] < 15:
+                    if self.board[p[0]][p[1]] == piece:
                         streak += 1
                     else:
                         break
-                    pos[0] += direction[i][0]
-                    pos[1] += direction[i][1]
-            if streak > 5:
+                    p[0] += direction[i][0]
+                    p[1] += direction[i][1]
+            if streak >= 6:
                 return True
         return False

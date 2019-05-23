@@ -11,10 +11,12 @@ pip install -r requirements.txt
 **How to Run**
 
 First cd into class:
+
 ``
 cd final-project-gomoku-julia-naomi
 ``
 Then run the main file:
+
 ``
 python3 main.py
 ``
@@ -54,5 +56,6 @@ class Gomoku
  Determines who wins (checks after every turn)
 
 **Watch the Game in Action!**
+
 ![image](https://github.com/kehillah-coding-2019/final-project-gomoku-julia-naomi/blob/master/game_example.png)
 

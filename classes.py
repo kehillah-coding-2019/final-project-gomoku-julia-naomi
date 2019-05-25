@@ -49,17 +49,13 @@ class Gomoku:
                 self.event(event)
 
             self.displayButton()
-
-            #print(event)
-
             self.render()
-
-
             self.clock.tick(60)
 
         pygame.quit()
 
     def event(self, event):
+        """On event"""
 
         global player
 
@@ -77,7 +73,7 @@ class Gomoku:
 
             elif self.play:
 
-                print(self.board)
+                #print(self.board)
 
                 x = (pos[0] - 35 + 35 // 2) // (36)
                 y = (pos[1] - 35 + 35 // 2) // (36)
@@ -87,6 +83,7 @@ class Gomoku:
                         self.lastpos = [x,y]
 
                         self.board[x][y] = 1 if player else 2
+                        self.num_turns += 1
 
                         if self.checkWin([x,y], player):
                             self.win = True
@@ -107,6 +104,7 @@ class Gomoku:
         pygame.display.update()
 
     def start(self):
+        """Start/reset game"""
         self.play = True
         self.board = [[0 for x in range(15)] for y in range(15)]
         self.lastpos = [-1,-1]
@@ -123,6 +121,7 @@ class Gomoku:
                 pygame.draw.rect(self.gameDisplay, white, [36 * x + 36, 36 * y + 36, 35, 35])
 
     def drawPiece(self):
+        """Draw each gomoku piece"""
 
         for x in range(15):
             for y in range(15):
@@ -146,27 +145,33 @@ class Gomoku:
         else:
             player_name = self.player_2
 
-        info = "It's your turn, %s" % (player_name) if not self.win else "%s has won the game" % (player_name)
+        info = "It's your turn, %s" % (player_name) if not self.win else "%s has won the game!" % (player_name)
         info_font = pygame.font.SysFont('Helvetica', 25)
         text = info_font.render(info, True, black)
         self.gameDisplay.blit(text,(220,660))
 
+        info = "Turn #%s" % (self.num_turns)
+        info_font = pygame.font.SysFont('Helvetica', 25)
+        text = info_font.render(info, True, black)
+        self.gameDisplay.blit(text,(500,660))
 
-    def createButton(self, msg,x,y,w,h,ic,ac, tc, action=None):
+
+
+
+    def createButton(self, msg,x,y,w,h,ic,ac,tc, action=None):
         """Create button with mouse over and clicking functionality"""
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
         if x+w > mouse[0] > x and y+h > mouse[1] > y:
-            pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
+            #pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
             return True
             if click[0] == 1 and action != None:
                 if action == "play":
                     self.play = True
 
-                #if action == "pause":
-                    #self.play = False
-
+                if action == "pause":
+                    self.play = False
 
         else:
             pygame.draw.rect(self.gameDisplay, ic,(x,y,w,h))
@@ -189,22 +194,10 @@ class Gomoku:
 
         mouse = pygame.mouse.get_pos()
 
-        # pygame.draw.rect(self.gameDisplay, color,
-        #                  (240, 600, 100, 50))
-        #
-        # info_font = pygame.font.SysFont('Helvetica', 25)
-        # text = info_font.render(info, True, white)
-        # textRect = text.get_rect()
-        # textRect.centerx = self.gamewidth // 2
-        # textRect.centery = self.gameheight - 75
-        # self.gameDisplay.blit(text, textRect)
-
         self.createButton(info, 240, 600, 100, 50, color, color2, white, action)
 
-        #if 240 + 100 > mouse[0] > 240 and 600 + 50 > mouse[1] > 600:
-        #print('The mouse is over the button')
-
     def checkWin(self, pos, player):
+        """Check win"""
         piece = 1 if player else 2
         if self.board[pos[0]][pos[1]] != piece:
             return False
